@@ -1,0 +1,250 @@
+rm(list=ls())
+setwd("D:/R for PLA segmentation/ML Data")
+getwd()
+
+# Getting data from MatLab raw data CSV files 
+
+Puncta_Label1<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (1).csv", header=TRUE)
+Puncta_Label2<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (2).csv", header=TRUE)
+Puncta_Label3<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (3).csv", header=TRUE)
+Puncta_Label4<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (4).csv", header=TRUE)
+Puncta_Label5<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (5).csv", header=TRUE)
+Puncta_Label6<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (6).csv", header=TRUE)
+Puncta_Label7<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (7).csv", header=TRUE)
+Puncta_Label8<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (8).csv", header=TRUE)
+Puncta_Label9<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (9).csv", header=TRUE)
+Puncta_Label10<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (10).csv", header=TRUE)
+Puncta_Label11<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (11).csv", header=TRUE)
+Puncta_Label12<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (12).csv", header=TRUE)
+Puncta_Label13<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (13).csv", header=TRUE)
+Puncta_Label14<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (14).csv", header=TRUE)
+Puncta_Label15<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (15).csv", header=TRUE)
+Puncta_Label16<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (16).csv", header=TRUE)
+Puncta_Label17<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (17).csv", header=TRUE)
+Puncta_Label18<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (18).csv", header=TRUE)
+Puncta_Label19<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (19).csv", header=TRUE)
+Puncta_Label20<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (20).csv", header=TRUE)
+Puncta_Label21<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (21).csv", header=TRUE)
+Puncta_Label22<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (22).csv", header=TRUE)
+Puncta_Label23<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (23).csv", header=TRUE)
+Puncta_Label24<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (24).csv", header=TRUE)
+Puncta_Label25<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (25).csv", header=TRUE)
+Puncta_Label26<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (26).csv", header=TRUE)
+Puncta_Label27<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (27).csv", header=TRUE)
+Puncta_Label28<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (28).csv", header=TRUE)
+Puncta_Label29<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (29).csv", header=TRUE)
+Puncta_Label30<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (30).csv", header=TRUE)
+Puncta_Label31<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (31).csv", header=TRUE)
+Puncta_Label32<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (32).csv", header=TRUE)
+Puncta_Label33<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (33).csv", header=TRUE)
+Puncta_Label34<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (34).csv", header=TRUE)
+Puncta_Label35<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (35).csv", header=TRUE)
+Puncta_Label36<-read.csv("D:/R for PLA segmentation/ML Data/Puncta (36).csv", header=TRUE)
+
+
+Cell_Label1<-read.csv("D:/R for PLA segmentation/ML Data/Cells (1).csv", header=TRUE)
+Cell_Label2<-read.csv("D:/R for PLA segmentation/ML Data/Cells (2).csv", header=TRUE)
+Cell_Label3<-read.csv("D:/R for PLA segmentation/ML Data/Cells (3).csv", header=TRUE)
+Cell_Label4<-read.csv("D:/R for PLA segmentation/ML Data/Cells (4).csv", header=TRUE)
+Cell_Label5<-read.csv("D:/R for PLA segmentation/ML Data/Cells (5).csv", header=TRUE)
+Cell_Label6<-read.csv("D:/R for PLA segmentation/ML Data/Cells (6).csv", header=TRUE)
+Cell_Label7<-read.csv("D:/R for PLA segmentation/ML Data/Cells (7).csv", header=TRUE)
+Cell_Label8<-read.csv("D:/R for PLA segmentation/ML Data/Cells (8).csv", header=TRUE)
+Cell_Label9<-read.csv("D:/R for PLA segmentation/ML Data/Cells (9).csv", header=TRUE)
+Cell_Label10<-read.csv("D:/R for PLA segmentation/ML Data/Cells (10).csv", header=TRUE)
+Cell_Label11<-read.csv("D:/R for PLA segmentation/ML Data/Cells (11).csv", header=TRUE)
+Cell_Label12<-read.csv("D:/R for PLA segmentation/ML Data/Cells (12).csv", header=TRUE)
+Cell_Label13<-read.csv("D:/R for PLA segmentation/ML Data/Cells (13).csv", header=TRUE)
+Cell_Label14<-read.csv("D:/R for PLA segmentation/ML Data/Cells (14).csv", header=TRUE)
+Cell_Label15<-read.csv("D:/R for PLA segmentation/ML Data/Cells (15).csv", header=TRUE)
+Cell_Label16<-read.csv("D:/R for PLA segmentation/ML Data/Cells (16).csv", header=TRUE)
+Cell_Label17<-read.csv("D:/R for PLA segmentation/ML Data/Cells (17).csv", header=TRUE)
+Cell_Label18<-read.csv("D:/R for PLA segmentation/ML Data/Cells (18).csv", header=TRUE)
+Cell_Label19<-read.csv("D:/R for PLA segmentation/ML Data/Cells (19).csv", header=TRUE)
+Cell_Label20<-read.csv("D:/R for PLA segmentation/ML Data/Cells (20).csv", header=TRUE)
+Cell_Label21<-read.csv("D:/R for PLA segmentation/ML Data/Cells (21).csv", header=TRUE)
+Cell_Label22<-read.csv("D:/R for PLA segmentation/ML Data/Cells (22).csv", header=TRUE)
+Cell_Label23<-read.csv("D:/R for PLA segmentation/ML Data/Cells (23).csv", header=TRUE)
+Cell_Label24<-read.csv("D:/R for PLA segmentation/ML Data/Cells (24).csv", header=TRUE)
+Cell_Label25<-read.csv("D:/R for PLA segmentation/ML Data/Cells (25).csv", header=TRUE)
+Cell_Label26<-read.csv("D:/R for PLA segmentation/ML Data/Cells (26).csv", header=TRUE)
+Cell_Label27<-read.csv("D:/R for PLA segmentation/ML Data/Cells (27).csv", header=TRUE)
+Cell_Label28<-read.csv("D:/R for PLA segmentation/ML Data/Cells (28).csv", header=TRUE)
+Cell_Label29<-read.csv("D:/R for PLA segmentation/ML Data/Cells (29).csv", header=TRUE)
+Cell_Label30<-read.csv("D:/R for PLA segmentation/ML Data/Cells (30).csv", header=TRUE)
+Cell_Label31<-read.csv("D:/R for PLA segmentation/ML Data/Cells (31).csv", header=TRUE)
+Cell_Label32<-read.csv("D:/R for PLA segmentation/ML Data/Cells (32).csv", header=TRUE)
+Cell_Label33<-read.csv("D:/R for PLA segmentation/ML Data/Cells (33).csv", header=TRUE)
+Cell_Label34<-read.csv("D:/R for PLA segmentation/ML Data/Cells (34).csv", header=TRUE)
+Cell_Label35<-read.csv("D:/R for PLA segmentation/ML Data/Cells (35).csv", header=TRUE)
+Cell_Label36<-read.csv("D:/R for PLA segmentation/ML Data/Cells (36).csv", header=TRUE)
+
+# Counting total cells numbers in each image 
+# Cell count = Total no of cells in an image
+
+Cell_count1<-nrow(Cell_Label1)
+Cell_count2<-nrow(Cell_Label2)
+Cell_count3<-nrow(Cell_Label3)
+Cell_count4<-nrow(Cell_Label4)
+Cell_count5<-nrow(Cell_Label5)
+Cell_count6<-nrow(Cell_Label6)
+Cell_count7<-nrow(Cell_Label7)
+Cell_count8<-nrow(Cell_Label8)
+Cell_count9<-nrow(Cell_Label9)
+Cell_count10<-nrow(Cell_Label10)
+Cell_count11<-nrow(Cell_Label11)
+Cell_count12<-nrow(Cell_Label12)
+Cell_count13<-nrow(Cell_Label13)
+Cell_count14<-nrow(Cell_Label14)
+Cell_count15<-nrow(Cell_Label15)
+Cell_count16<-nrow(Cell_Label16)
+Cell_count17<-nrow(Cell_Label17)
+Cell_count18<-nrow(Cell_Label18)
+Cell_count19<-nrow(Cell_Label19)
+Cell_count20<-nrow(Cell_Label20)
+Cell_count21<-nrow(Cell_Label21)
+Cell_count22<-nrow(Cell_Label22)
+Cell_count23<-nrow(Cell_Label23)
+Cell_count24<-nrow(Cell_Label24)
+Cell_count25<-nrow(Cell_Label25)
+Cell_count26<-nrow(Cell_Label26)
+Cell_count27<-nrow(Cell_Label27)
+Cell_count28<-nrow(Cell_Label28)
+Cell_count29<-nrow(Cell_Label29)
+Cell_count30<-nrow(Cell_Label30)
+Cell_count31<-nrow(Cell_Label31)
+Cell_count32<-nrow(Cell_Label32)
+Cell_count33<-nrow(Cell_Label33)
+Cell_count34<-nrow(Cell_Label34)
+Cell_count35<-nrow(Cell_Label35)
+Cell_count36<-nrow(Cell_Label36)
+
+# Calculating each Punctum intensity in an image
+# Punctum intensity = Area (Px) of Punctum X MeanIntensity
+
+Punctum_intensity1<-Puncta_Label1$Area.Px.*Puncta_Label1$MeanIntensity
+Punctum_intensity2<-Puncta_Label2$Area.Px.*Puncta_Label2$MeanIntensity
+Punctum_intensity3<-Puncta_Label3$Area.Px.*Puncta_Label3$MeanIntensity
+Punctum_intensity4<-Puncta_Label4$Area.Px.*Puncta_Label4$MeanIntensity
+Punctum_intensity5<-Puncta_Label5$Area.Px.*Puncta_Label5$MeanIntensity
+Punctum_intensity6<-Puncta_Label6$Area.Px.*Puncta_Label6$MeanIntensity
+Punctum_intensity7<-Puncta_Label7$Area.Px.*Puncta_Label7$MeanIntensity
+Punctum_intensity8<-Puncta_Label8$Area.Px.*Puncta_Label8$MeanIntensity
+Punctum_intensity9<-Puncta_Label9$Area.Px.*Puncta_Label9$MeanIntensity
+Punctum_intensity10<-Puncta_Label10$Area.Px.*Puncta_Label10$MeanIntensity
+Punctum_intensity11<-Puncta_Label11$Area.Px.*Puncta_Label11$MeanIntensity
+Punctum_intensity12<-Puncta_Label12$Area.Px.*Puncta_Label12$MeanIntensity
+Punctum_intensity13<-Puncta_Label13$Area.Px.*Puncta_Label13$MeanIntensity
+Punctum_intensity14<-Puncta_Label14$Area.Px.*Puncta_Label14$MeanIntensity
+Punctum_intensity15<-Puncta_Label15$Area.Px.*Puncta_Label15$MeanIntensity
+Punctum_intensity16<-Puncta_Label16$Area.Px.*Puncta_Label16$MeanIntensity
+Punctum_intensity17<-Puncta_Label17$Area.Px.*Puncta_Label17$MeanIntensity
+Punctum_intensity18<-Puncta_Label18$Area.Px.*Puncta_Label18$MeanIntensity
+Punctum_intensity19<-Puncta_Label19$Area.Px.*Puncta_Label19$MeanIntensity
+Punctum_intensity20<-Puncta_Label20$Area.Px.*Puncta_Label20$MeanIntensity
+Punctum_intensity21<-Puncta_Label21$Area.Px.*Puncta_Label21$MeanIntensity
+Punctum_intensity22<-Puncta_Label22$Area.Px.*Puncta_Label22$MeanIntensity
+Punctum_intensity23<-Puncta_Label23$Area.Px.*Puncta_Label23$MeanIntensity
+Punctum_intensity24<-Puncta_Label24$Area.Px.*Puncta_Label24$MeanIntensity
+Punctum_intensity25<-Puncta_Label25$Area.Px.*Puncta_Label25$MeanIntensity
+Punctum_intensity26<-Puncta_Label26$Area.Px.*Puncta_Label26$MeanIntensity
+Punctum_intensity27<-Puncta_Label27$Area.Px.*Puncta_Label27$MeanIntensity
+Punctum_intensity28<-Puncta_Label28$Area.Px.*Puncta_Label28$MeanIntensity
+Punctum_intensity29<-Puncta_Label29$Area.Px.*Puncta_Label29$MeanIntensity
+Punctum_intensity30<-Puncta_Label30$Area.Px.*Puncta_Label30$MeanIntensity
+Punctum_intensity31<-Puncta_Label31$Area.Px.*Puncta_Label31$MeanIntensity
+Punctum_intensity32<-Puncta_Label32$Area.Px.*Puncta_Label32$MeanIntensity
+Punctum_intensity33<-Puncta_Label33$Area.Px.*Puncta_Label33$MeanIntensity
+Punctum_intensity34<-Puncta_Label34$Area.Px.*Puncta_Label34$MeanIntensity
+Punctum_intensity35<-Puncta_Label35$Area.Px.*Puncta_Label35$MeanIntensity
+Punctum_intensity36<-Puncta_Label36$Area.Px.*Puncta_Label36$MeanIntensity
+
+# Calculating Puncta intensity of each image
+# Puncta intensity = Sum of all Punctum intensity in an image
+
+Puncta_intensity1<-sum(Punctum_intensity1, na.rm=FALSE)
+Puncta_intensity2<-sum(Punctum_intensity2, na.rm=FALSE)
+Puncta_intensity3<-sum(Punctum_intensity3, na.rm=FALSE)
+Puncta_intensity4<-sum(Punctum_intensity4, na.rm=FALSE)
+Puncta_intensity5<-sum(Punctum_intensity5, na.rm=FALSE)
+Puncta_intensity6<-sum(Punctum_intensity6, na.rm=FALSE)
+Puncta_intensity7<-sum(Punctum_intensity7, na.rm=FALSE)
+Puncta_intensity8<-sum(Punctum_intensity8, na.rm=FALSE)
+Puncta_intensity9<-sum(Punctum_intensity9, na.rm=FALSE)
+Puncta_intensity10<-sum(Punctum_intensity10, na.rm=FALSE)
+Puncta_intensity11<-sum(Punctum_intensity11, na.rm=FALSE)
+Puncta_intensity12<-sum(Punctum_intensity12, na.rm=FALSE)
+Puncta_intensity13<-sum(Punctum_intensity13, na.rm=FALSE)
+Puncta_intensity14<-sum(Punctum_intensity14, na.rm=FALSE)
+Puncta_intensity15<-sum(Punctum_intensity15, na.rm=FALSE)
+Puncta_intensity16<-sum(Punctum_intensity16, na.rm=FALSE)
+Puncta_intensity17<-sum(Punctum_intensity17, na.rm=FALSE)
+Puncta_intensity18<-sum(Punctum_intensity18, na.rm=FALSE)
+Puncta_intensity19<-sum(Punctum_intensity19, na.rm=FALSE)
+Puncta_intensity20<-sum(Punctum_intensity20, na.rm=FALSE)
+Puncta_intensity21<-sum(Punctum_intensity21, na.rm=FALSE)
+Puncta_intensity22<-sum(Punctum_intensity22, na.rm=FALSE)
+Puncta_intensity23<-sum(Punctum_intensity23, na.rm=FALSE)
+Puncta_intensity24<-sum(Punctum_intensity24, na.rm=FALSE)
+Puncta_intensity25<-sum(Punctum_intensity25, na.rm=FALSE)
+Puncta_intensity26<-sum(Punctum_intensity26, na.rm=FALSE)
+Puncta_intensity27<-sum(Punctum_intensity27, na.rm=FALSE)
+Puncta_intensity28<-sum(Punctum_intensity28, na.rm=FALSE)
+Puncta_intensity29<-sum(Punctum_intensity29, na.rm=FALSE)
+Puncta_intensity30<-sum(Punctum_intensity30, na.rm=FALSE)
+Puncta_intensity31<-sum(Punctum_intensity31, na.rm=FALSE)
+Puncta_intensity32<-sum(Punctum_intensity32, na.rm=FALSE)
+Puncta_intensity33<-sum(Punctum_intensity33, na.rm=FALSE)
+Puncta_intensity34<-sum(Punctum_intensity34, na.rm=FALSE)
+Puncta_intensity35<-sum(Punctum_intensity35, na.rm=FALSE)
+Puncta_intensity36<-sum(Punctum_intensity36, na.rm=FALSE)
+
+# Calculating PLA signal of each image
+# PLA Signal (Mean Puncta intensity of cells in image) = Puncta intensity / Cell count 
+
+PLA_SIgnal_Image1_FI<-Puncta_intensity1/Cell_count1
+PLA_SIgnal_Image2_FI<-Puncta_intensity2/Cell_count2
+PLA_SIgnal_Image3_FI<-Puncta_intensity3/Cell_count3
+PLA_SIgnal_Image4_FI<-Puncta_intensity4/Cell_count4
+PLA_SIgnal_Image5_FI<-Puncta_intensity5/Cell_count5
+PLA_SIgnal_Image6_FI<-Puncta_intensity6/Cell_count6
+PLA_SIgnal_Image7_FI<-Puncta_intensity7/Cell_count7
+PLA_SIgnal_Image8_FI<-Puncta_intensity8/Cell_count8
+PLA_SIgnal_Image9_FI<-Puncta_intensity9/Cell_count9
+PLA_SIgnal_Image10_FI<-Puncta_intensity10/Cell_count10
+PLA_SIgnal_Image11_FI<-Puncta_intensity11/Cell_count11
+PLA_SIgnal_Image12_FI<-Puncta_intensity12/Cell_count12
+PLA_SIgnal_Image13_FI<-Puncta_intensity13/Cell_count13
+PLA_SIgnal_Image14_FI<-Puncta_intensity14/Cell_count14
+PLA_SIgnal_Image15_FI<-Puncta_intensity15/Cell_count15
+PLA_SIgnal_Image16_FI<-Puncta_intensity16/Cell_count16
+PLA_SIgnal_Image17_FI<-Puncta_intensity17/Cell_count17
+PLA_SIgnal_Image18_FI<-Puncta_intensity18/Cell_count18
+PLA_SIgnal_Image19_FI<-Puncta_intensity19/Cell_count19
+PLA_SIgnal_Image20_FI<-Puncta_intensity20/Cell_count20
+PLA_SIgnal_Image21_FI<-Puncta_intensity21/Cell_count21
+PLA_SIgnal_Image22_FI<-Puncta_intensity22/Cell_count22
+PLA_SIgnal_Image23_FI<-Puncta_intensity23/Cell_count23
+PLA_SIgnal_Image24_FI<-Puncta_intensity24/Cell_count24
+PLA_SIgnal_Image25_FI<-Puncta_intensity25/Cell_count25
+PLA_SIgnal_Image26_FI<-Puncta_intensity26/Cell_count26
+PLA_SIgnal_Image27_FI<-Puncta_intensity27/Cell_count27
+PLA_SIgnal_Image28_FI<-Puncta_intensity28/Cell_count28
+PLA_SIgnal_Image29_FI<-Puncta_intensity29/Cell_count29
+PLA_SIgnal_Image30_FI<-Puncta_intensity30/Cell_count30
+PLA_SIgnal_Image31_FI<-Puncta_intensity31/Cell_count31
+PLA_SIgnal_Image32_FI<-Puncta_intensity32/Cell_count32
+PLA_SIgnal_Image33_FI<-Puncta_intensity33/Cell_count33
+PLA_SIgnal_Image34_FI<-Puncta_intensity34/Cell_count34
+PLA_SIgnal_Image35_FI<-Puncta_intensity35/Cell_count35
+PLA_SIgnal_Image36_FI<-Puncta_intensity36/Cell_count36
+
+
+# Tabulation of PLA signal of each image
+
+df1<- data.frame(("PLA Signal"), U = c(PLA_SIgnal_Image1_FI, PLA_SIgnal_Image2_FI, PLA_SIgnal_Image3_FI, PLA_SIgnal_Image4_FI, PLA_SIgnal_Image5_FI, PLA_SIgnal_Image6_FI, PLA_SIgnal_Image7_FI, PLA_SIgnal_Image8_FI, PLA_SIgnal_Image9_FI, PLA_SIgnal_Image10_FI, PLA_SIgnal_Image11_FI, PLA_SIgnal_Image12_FI, PLA_SIgnal_Image13_FI, PLA_SIgnal_Image14_FI, PLA_SIgnal_Image15_FI, PLA_SIgnal_Image16_FI, PLA_SIgnal_Image17_FI, PLA_SIgnal_Image18_FI, PLA_SIgnal_Image19_FI, PLA_SIgnal_Image20_FI, PLA_SIgnal_Image21_FI, PLA_SIgnal_Image22_FI, PLA_SIgnal_Image23_FI, PLA_SIgnal_Image24_FI, PLA_SIgnal_Image25_FI, PLA_SIgnal_Image26_FI, PLA_SIgnal_Image27_FI, PLA_SIgnal_Image28_FI, PLA_SIgnal_Image29_FI, PLA_SIgnal_Image30_FI, PLA_SIgnal_Image31_FI, PLA_SIgnal_Image32_FI, PLA_SIgnal_Image33_FI, PLA_SIgnal_Image34_FI, PLA_SIgnal_Image35_FI, PLA_SIgnal_Image36_FI))
+
+print(df1)
+
+write.csv(df1, "D:/R for PLA segmentation/Output.csv", row.names=FALSE)
+
