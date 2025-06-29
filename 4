@@ -1,0 +1,142 @@
+rm(list=ls())
+setwd("D:/PLA segmentation/R")
+getwd()
+
+
+# Getting data from MatLab raw data CSV files 
+
+U_Puncta_Label1<-read.csv("D:/PLA segmentation/R/4/U/Puncta_Statistics1.csv", header=TRUE)
+U_Puncta_Label2<-read.csv("D:/PLA segmentation/R/4/U/Puncta_Statistics2.csv", header=TRUE)
+U_Puncta_Label3<-read.csv("D:/PLA segmentation/R/4/U/Puncta_Statistics3.csv", header=TRUE)
+U_Cell_Label1<-read.csv("D:/PLA segmentation/R/4/U/Cell Labels1.csv", header=TRUE)
+U_Cell_Label2<-read.csv("D:/PLA segmentation/R/4/U/Cell Labels2.csv", header=TRUE)
+U_Cell_Label3<-read.csv("D:/PLA segmentation/R/4/U/Cell Labels3.csv", header=TRUE)
+
+H1_Puncta_Label1<-read.csv("D:/PLA segmentation/R/4/H1/Puncta_Statistics1.csv", header=TRUE)
+H1_Puncta_Label2<-read.csv("D:/PLA segmentation/R/4/H1/Puncta_Statistics2.csv", header=TRUE)
+H1_Puncta_Label3<-read.csv("D:/PLA segmentation/R/4/H1/Puncta_Statistics3.csv", header=TRUE)
+H1_Cell_Label1<-read.csv("D:/PLA segmentation/R/4/H1/Cell Labels1.csv", header=TRUE)
+H1_Cell_Label2<-read.csv("D:/PLA segmentation/R/4/H1/Cell Labels2.csv", header=TRUE)
+H1_Cell_Label3<-read.csv("D:/PLA segmentation/R/4/H1/Cell Labels3.csv", header=TRUE)
+
+H6_Puncta_Label1<-read.csv("D:/PLA segmentation/R/4/H6/Puncta_Statistics1.csv", header=TRUE)
+H6_Puncta_Label2<-read.csv("D:/PLA segmentation/R/4/H6/Puncta_Statistics2.csv", header=TRUE)
+H6_Puncta_Label3<-read.csv("D:/PLA segmentation/R/4/H6/Puncta_Statistics3.csv", header=TRUE)
+H6_Cell_Label1<-read.csv("D:/PLA segmentation/R/4/H6/Cell Labels1.csv", header=TRUE)
+H6_Cell_Label2<-read.csv("D:/PLA segmentation/R/4/H6/Cell Labels2.csv", header=TRUE)
+H6_Cell_Label3<-read.csv("D:/PLA segmentation/R/4/H6/Cell Labels3.csv", header=TRUE)
+
+H24_Puncta_Label1<-read.csv("D:/PLA segmentation/R/4/H24/Puncta_Statistics1.csv", header=TRUE)
+H24_Puncta_Label2<-read.csv("D:/PLA segmentation/R/4/H24/Puncta_Statistics2.csv", header=TRUE)
+H24_Puncta_Label3<-read.csv("D:/PLA segmentation/R/4/H24/Puncta_Statistics3.csv", header=TRUE)
+H24_Cell_Label1<-read.csv("D:/PLA segmentation/R/4/H24/Cell Labels1.csv", header=TRUE)
+H24_Cell_Label2<-read.csv("D:/PLA segmentation/R/4/H24/Cell Labels2.csv", header=TRUE)
+H24_Cell_Label3<-read.csv("D:/PLA segmentation/R/4/H24/Cell Labels3.csv", header=TRUE)
+
+# Counting total cells numbers in each image 
+# Cell count = Total no of cells in an image
+
+U_cell_count1<-nrow(U_Cell_Label1)
+U_cell_count2<-nrow(U_Cell_Label2)
+U_cell_count3<-nrow(U_Cell_Label3)
+
+H1_cell_count1<-nrow(H1_Cell_Label1)
+H1_cell_count2<-nrow(H1_Cell_Label2)
+H1_cell_count3<-nrow(H1_Cell_Label3)
+
+H6_cell_count1<-nrow(H6_Cell_Label1)
+H6_cell_count2<-nrow(H6_Cell_Label2)
+H6_cell_count3<-nrow(H6_Cell_Label3)
+
+H24_cell_count1<-nrow(H24_Cell_Label1)
+H24_cell_count2<-nrow(H24_Cell_Label2)
+H24_cell_count3<-nrow(H24_Cell_Label3)
+
+
+# Calculating each Punctum intensity in an image
+# Punctum intensity = Area (Px) of Punctum X MeanIntensity
+
+U_Punctum_intensity1<-U_Puncta_Label1$Area.Px.*U_Puncta_Label1$MeanIntensity
+U_Punctum_intensity2<-U_Puncta_Label2$Area.Px.*U_Puncta_Label2$MeanIntensity
+U_Punctum_intensity3<-U_Puncta_Label3$Area.Px.*U_Puncta_Label3$MeanIntensity
+
+H1_Punctum_intensity1<-H1_Puncta_Label1$Area.Px.*H1_Puncta_Label1$MeanIntensity
+H1_Punctum_intensity2<-H1_Puncta_Label2$Area.Px.*H1_Puncta_Label2$MeanIntensity
+H1_Punctum_intensity3<-H1_Puncta_Label3$Area.Px.*H1_Puncta_Label3$MeanIntensity
+
+H6_Punctum_intensity1<-H6_Puncta_Label1$Area.Px.*H6_Puncta_Label1$MeanIntensity
+H6_Punctum_intensity2<-H6_Puncta_Label2$Area.Px.*H6_Puncta_Label2$MeanIntensity
+H6_Punctum_intensity3<-H6_Puncta_Label3$Area.Px.*H6_Puncta_Label3$MeanIntensity
+
+H24_Punctum_intensity1<-H24_Puncta_Label1$Area.Px.*H24_Puncta_Label1$MeanIntensity
+H24_Punctum_intensity2<-H24_Puncta_Label2$Area.Px.*H24_Puncta_Label2$MeanIntensity
+H24_Punctum_intensity3<-H24_Puncta_Label3$Area.Px.*H24_Puncta_Label3$MeanIntensity
+
+# Calculating Puncta intensity of each image
+# Puncta intensity = Sum of all Punctum intensity in an image 
+
+U_Puncta_intensity1<-sum(U_Punctum_intensity1, na.rm=FALSE)
+U_Puncta_intensity2<-sum(U_Punctum_intensity2, na.rm=FALSE)
+U_Puncta_intensity3<-sum(U_Punctum_intensity3, na.rm=FALSE)
+
+H1_Puncta_intensity1<-sum(H1_Punctum_intensity1, na.rm=FALSE)
+H1_Puncta_intensity2<-sum(H1_Punctum_intensity2, na.rm=FALSE)
+H1_Puncta_intensity3<-sum(H1_Punctum_intensity3, na.rm=FALSE)
+
+H6_Puncta_intensity1<-sum(H6_Punctum_intensity1, na.rm=FALSE)
+H6_Puncta_intensity2<-sum(H6_Punctum_intensity2, na.rm=FALSE)
+H6_Puncta_intensity3<-sum(H6_Punctum_intensity3, na.rm=FALSE)
+
+H24_Puncta_intensity1<-sum(H24_Punctum_intensity1, na.rm=FALSE)
+H24_Puncta_intensity2<-sum(H24_Punctum_intensity2, na.rm=FALSE)
+H24_Puncta_intensity3<-sum(H24_Punctum_intensity3, na.rm=FALSE)
+
+# Calculating PLA signal of each image
+# PLA Signal (Mean Puncta intensity of cells in image) = Puncta intensity / Cell count 
+
+U_PLA_Signal_1<-U_Puncta_intensity1/U_cell_count1
+U_PLA_Signal_2<-U_Puncta_intensity2/U_cell_count2
+U_PLA_Signal_3<-U_Puncta_intensity3/U_cell_count3
+
+H1_PLA_Signal_1<-H1_Puncta_intensity1/H1_cell_count1
+H1_PLA_Signal_2<-H1_Puncta_intensity2/H1_cell_count2
+H1_PLA_Signal_3<-H1_Puncta_intensity3/H1_cell_count3
+
+H6_PLA_Signal_1<-H6_Puncta_intensity1/H6_cell_count1
+H6_PLA_Signal_2<-H6_Puncta_intensity2/H6_cell_count2
+H6_PLA_Signal_3<-H6_Puncta_intensity3/H6_cell_count3
+
+H24_PLA_Signal_1<-H24_Puncta_intensity1/H24_cell_count1
+H24_PLA_Signal_2<-H24_Puncta_intensity2/H24_cell_count2
+H24_PLA_Signal_3<-H24_Puncta_intensity3/H24_cell_count3
+
+# Tabulation of PLA signal of each image
+
+df1<- data.frame(("PLA Signal"), U = c(U_PLA_Signal_1, U_PLA_Signal_2, U_PLA_Signal_3),
+                 HS_1h = c(H1_PLA_Signal_1, H1_PLA_Signal_2, H1_PLA_Signal_3),
+                 HS_6h = c(H6_PLA_Signal_1, H6_PLA_Signal_2, H6_PLA_Signal_3),
+                 HS_24h = c(H24_PLA_Signal_1, H24_PLA_Signal_2, H24_PLA_Signal_3))
+
+print(df1)
+
+# Calculation of Mean PLA signal of control (U) group
+# Mean PLA signal of control group = PLA intensity of all images in the control group / No of images in the control group
+
+
+U_Total_PLA_Signal<-U_PLA_Signal_1+U_PLA_Signal_2+U_PLA_Signal_3
+U_Mean_PLA_Signal<-U_Total_PLA_Signal/3
+
+
+# Tabulation of Fold change in PLA signal with respect to the control group (U)
+# Fold change in PLA signal (Normalized Florescence Intensity) = Mean intensity of cells in image / Mean intensity of control group
+
+
+df2<- data.frame(("Fold change in PLA signal"), U = c(U_PLA_Signal_1/U_Mean_PLA_Signal, U_PLA_Signal_2/U_Mean_PLA_Signal, U_PLA_Signal_3/U_Mean_PLA_Signal),
+                 HS_1h = c(H1_PLA_Signal_1/U_Mean_PLA_Signal, H1_PLA_Signal_2/U_Mean_PLA_Signal, H1_PLA_Signal_3/U_Mean_PLA_Signal),
+                 HS_6h = c(H6_PLA_Signal_1/U_Mean_PLA_Signal, H6_PLA_Signal_2/U_Mean_PLA_Signal, H6_PLA_Signal_3/U_Mean_PLA_Signal),
+                 HS_24h = c(H24_PLA_Signal_1/U_Mean_PLA_Signal, H24_PLA_Signal_2/U_Mean_PLA_Signal, H24_PLA_Signal_3/U_Mean_PLA_Signal))
+
+print(df2)
+
+write.csv(df1, "D:/PLA segmentation/R/4/PLA signal.csv", row.names=FALSE)
+write.csv(df2, "D:/PLA segmentation/R/4/Fold change in PLA signal.csv", row.names=FALSE)
