@@ -1,0 +1,426 @@
+close all
+clear integratedGrayValues
+
+[files,paths] = uigetfile('*.czi','SELECT MASTER IMAGES','SELECT MASTER IMAGES','MultiSelect','on');
+disp('Master Images Selected')
+DESTINATION_FOLDER = uigetdir('C:\','SELECT DESTINATION FOLDER');
+disp('Destination folder selected')
+filescell = fullfile(paths,files);
+
+%% Parameter Extraction
+
+%Master Channel Stitching
+Datai = ReadImage6D(char(filescell(3)));
+image6d = Datai{1};
+squeezei = squeeze(image6d(1,1,:,2,:,:));
+
+sumz = [];
+for k=1:size(squeezei,1)
+    sumz = [sumz,sum(squeezei(k,:,:),'all')];
+end
+       
+MidAi = find(sumz == max(sumz));    
+Ai = squeezei(MidAi,:,:);
+
+%Nuclei Channel Stitching
+squeezebi = squeeze(image6d(1,1,:,1,:,:));
+
+sumzb = [];
+for k=1:size(squeezebi,1)
+    sumzb = [sumzb,sum(squeezebi(k,:,:),'all')];
+end
+
+MidBi = find(sumzb == max(sumzb));
+BAbz = squeezebi(MidBi,:,:);
+A1 = squeeze(Ai(1,:,:));
+B1 = squeeze(BAbz(1,:,:));
+figure, imshow(A1), colorbar,caxis([0 max(A1,[],'all')]),title('Original Master Image')
+figure, imshow(B1), colorbar,caxis([0 max(B1,[],'all')]),title('Original Nuclei Image')
+
+%% Threshold Segmentation of Nuclei
+
+fla = 'N';
+while fla == 'N'
+
+%Condition for filters or not
+prompt = 'Do you want to apply filters? Y/N: ';
+x = input(prompt,'s');
+if x == 'Y'
+    prompt = {'Threshold Adjusting Factor:'};
+    dlgtitle = 'Input';
+    dims = [1 35];
+    definput = {'18000'};
+    answer = inputdlg(prompt,dlgtitle,dims,definput);
+    
+  
+    Adjustfactori = str2num(answer{1});
+
+    MedAi = medfilt2(B1,[4 4]);
+    
+    MaxAi = nlfilter(MedAi,[4 4],@(x)max(x(:)));
+    
+    Threshi = MaxAi;
+    CustomMedi = mean(MaxAi,'all')+Adjustfactori;
+    Threshi(Threshi<CustomMedi) = 0;
+    Threshi(Threshi>=CustomMedi) = 1;
+
+    flamsi = imfill(Threshi,'holes');
+    seDAi = strel('diamond',1);
+    BWfinalBi = imerode(flamsi, seDAi);
+    BWfinalBi = imerode(BWfinalBi, seDAi);
+    
+
+disp('Generating segmented master image')
+figure, imshow(BWfinalBi), colorbar,caxis([0 1]),title(['Segmented Master Image',num2str(i)])
+end
+prompt = 'Are you happy? Y/N: ';
+fla = input(prompt,'s');
+if fla == 'N'
+   close
+end
+end
+
+%% Connected Nuclei Separation
+
+segfla = 'N';
+while segfla == 'N'
+
+    prompt = 'Are your cells connected after segmentation? Y/N: ';
+    y = input(prompt,'s');
+
+if y == 'Y'
+    prompt = {'Segmentation Factor:','Area Threshold:'};
+    dlgtitle = 'Input';
+    dims = [1 35];
+    definput = {'5','4000'};
+    answer = inputdlg(prompt,dlgtitle,dims,definput);
+    
+    Segmentationfactor = str2num(answer{1});
+    Areathresh = str2num(answer{2});
+
+   
+    Sobelsegmentation = BWfinalBi;
+    segmentopen = ~bwareaopen(~Sobelsegmentation,10);
+    %%%
+    D = -bwdist(~Sobelsegmentation);
+    %%%
+    disp('First Watershed')
+    FirstWS = watershed(D);
+    %%%
+    segmentopen = Sobelsegmentation;
+    segmentopen(FirstWS == 0) = 0;
+    %%%
+    mask = imextendedmin(D,Segmentationfactor);
+    %%%
+    disp('Second Watershed')
+    D2 = imimposemin(D,mask);
+    Ld2 = watershed(D2);
+    bw3 = Sobelsegmentation;
+    bw3(Ld2 == 0) = 0;
+    BWfinalBi = bw3;
+end
+ % Finding objects in the segment and filtering using area
+
+CC = bwconncomp(BWfinalBi);
+L = labelmatrix(CC);
+stats = regionprops('table',L,'Area');
+
+numstats = table2array(stats);
+label = find(numstats(:)>Areathresh);
+f = transpose(1:size(label,1));
+AMI = numstats(label,:);
+combine = [f,AMI];
+
+filareas = ismember(L,label);
+
+
+disp('Generating Filtered Segments')
+figure,imshow(filareas),colorbar,caxis([0 1]),title(['Filtered Segments',num2str(i)])
+
+prompt = 'Are you happy? Y/N: ';
+segfla = input(prompt,'s');
+if segfla == 'N'
+   close
+end
+end
+%% Puncta Detection
+hist = histogram(A1,256);
+vals = hist.Values;
+close
+vals(vals==0) = [];
+vals = transpose(vals);
+vals = log10(vals);
+lenv = size(vals,1);
+lindex = transpose([1:lenv]);
+dvals = [lindex,vals];
+x = lindex;
+y = vals;
+p = polyfit(x,y,1);
+
+y1 = polyval(p,x);
+figure
+plot(x,y,'o')
+hold on
+plot(x,y1)
+
+flango = p(1).*x(:,1)+p(2);
+difz = flango-y;
+normie = max(difz);
+binpoint = find(difz==normie);
+
+
+Punk = 'N';
+
+while Punk == 'N'
+koolaid = A1;
+PunctaThresh = binpoint*255.996;
+prompt = {'PunctaThresh Adjustment:'};
+    dlgtitle = 'Input';
+    dims = [1 35];
+    definput = {'0.1'};
+    answer = inputdlg(prompt,dlgtitle,dims,definput);
+    
+    PTAdjust = str2num(answer{1});
+%%%%%%%%%%%%%%%%%%%%%
+koolaid(koolaid<PunctaThresh+PunctaThresh*(PTAdjust)) = 0;
+close
+
+figure,imshow(koolaid),colorbar,caxis([0 1])
+
+prompt = 'Are you happy? Y/N: ';
+Punk = input(prompt,'s');
+
+if Punk == 'N' 
+    close
+end
+
+end
+%%%%%%%%%%%%Generate Punctate Mask 
+
+Dink = 'N';
+
+while Dink == 'N'
+prompt = {'Punctate Area Threshold:','Punctate Maximum Size'};
+    dlgtitle = 'Input';
+    dims = [1 35];
+    definput = {'10','40'};
+    answer = inputdlg(prompt,dlgtitle,dims,definput);
+    
+    Areathresh2 = str2num(answer{1});
+    Areathresh3 = str2num(answer{2});
+
+Pseglog = logical(koolaid);
+Pseg = bwconncomp(Pseglog);
+LabelPseg = labelmatrix(Pseg);
+
+Punctastats = regionprops('table',LabelPseg,A1,'Area','MeanIntensity');
+
+Pnumstats = table2array(Punctastats);
+plabel = find(Pnumstats(:,1)>Areathresh2 & Pnumstats(:,1)<Areathresh3);
+o = transpose(1:size(plabel,1));
+pAMI = Pnumstats(plabel,:);
+pcombine = [o,pAMI];
+
+pareas1 = ismember(LabelPseg,plabel);
+
+
+figure,imshow(pareas1),colorbar,caxis([0 1])
+
+
+prompt = 'Are you happy? Y/N: ';
+Dink = input(prompt,'s');
+
+if Dink == 'N' 
+    close
+end
+
+end
+close all
+
+
+
+
+
+
+
+% ===== ADD-ON: Create 'Results' folder inside destination and Save chosen input parameters to TXT =====
+
+
+ResultsFolder = fullfile(DESTINATION_FOLDER, 'Results');
+
+if ~exist(ResultsFolder, 'dir')
+    mkdir(ResultsFolder);
+end
+
+fid = fopen(fullfile(ResultsFolder, 'Chosen_ML_Input_Parameters.txt'), 'w');
+
+fprintf(fid, 'ThresholdAdjustingFactor: %g\n', Adjustfactori);
+fprintf(fid, 'SegmentationFactor: %g\n', Segmentationfactor);
+fprintf(fid, 'AreaThreshold_Cells: %g\n', Areathresh);
+fprintf(fid, 'PunctaThreshAdjustment: %g\n', PTAdjust);
+fprintf(fid, 'PunctateAreaThreshold_Min: %g\n', Areathresh2);
+fprintf(fid, 'PunctateAreaThreshold_Max: %g\n', Areathresh3);
+
+fclose(fid);
+
+
+%% Run Loop With Chosen Parameters
+
+for i = 1:length(filescell)
+    %Master Channel Stitching
+    Datai = ReadImage6D(char(filescell(i)));
+    image6d = Datai{1};
+    squeezei = squeeze(image6d(1,1,:,2,:,:));
+    
+    sumz = [];
+    for k=1:size(squeezei,1)
+        sumz = [sumz,sum(squeezei(k,:,:),'all')];
+    end
+           
+    MidAi = find(sumz == max(sumz));    
+    Ai = squeezei(MidAi,:,:);
+    
+    %Nuclei Channel Stitching
+    squeezebi = squeeze(image6d(1,1,:,1,:,:));
+    
+    sumzb = [];
+    for k=1:size(squeezebi,1)
+        sumzb = [sumzb,sum(squeezebi(k,:,:),'all')];
+    end
+    
+    MidBi = find(sumzb == max(sumzb));
+    BAbz = squeezebi(MidBi,:,:);
+    A1 = squeeze(Ai(1,:,:));
+    B1 = squeeze(BAbz(1,:,:));
+    f1 = figure, imshow(A1), colorbar,caxis([0 max(A1,[],'all')]),title('Original Master Image')
+    saveas(f1,fullfile(DESTINATION_FOLDER,[filescell{1,i}(max(find(filescell{1,i}=='\')+1):end-4),'1_Original_Master_Image','.png']))
+    f2 = figure, imshow(B1), colorbar,caxis([0 max(B1,[],'all')]),title('Original Nuclei Image')
+    saveas(f2,fullfile(DESTINATION_FOLDER,[filescell{1,i}(max(find(filescell{1,i}=='\')+1):end-4),'2_Original_Nuclei_Image','.png']))
+   
+    
+    MedAi = medfilt2(B1,[4 4]);
+        
+    MaxAi = nlfilter(MedAi,[4 4],@(x)max(x(:)));
+        
+    Threshi = MaxAi;
+    CustomMedi = mean(MaxAi,'all')+Adjustfactori;
+    Threshi(Threshi<CustomMedi) = 0;
+    Threshi(Threshi>=CustomMedi) = 1;
+    
+    flamsi = imfill(Threshi,'holes');
+    seDAi = strel('diamond',1);
+    BWfinalBi = imerode(flamsi, seDAi);
+    BWfinalBi = imerode(BWfinalBi, seDAi);
+        
+    disp('Generating segmented master image')
+    f3 = figure, imshow(BWfinalBi), colorbar,caxis([0 1]),title(['Segmented Master Image',num2str(i)])
+    saveas(f3,fullfile(DESTINATION_FOLDER,[filescell{1,i}(max(find(filescell{1,i}=='\')+1):end-4),'3_Segmented_Master_Image','.png']))
+    
+
+    Sobelsegmentation = BWfinalBi;
+    segmentopen = ~bwareaopen(~Sobelsegmentation,10);
+    %%%
+    D = -bwdist(~Sobelsegmentation);
+    %%%
+    disp('First Watershed')
+    FirstWS = watershed(D);
+    %%%
+    segmentopen = Sobelsegmentation;
+    segmentopen(FirstWS == 0) = 0;
+    %%%
+    mask = imextendedmin(D,Segmentationfactor);
+    %%%
+    disp('Second Watershed')
+    D2 = imimposemin(D,mask);
+    Ld2 = watershed(D2);
+    bw3 = Sobelsegmentation;
+    bw3(Ld2 == 0) = 0;
+    BWfinalBi = bw3;
+
+    % Finding objects in the segment and filtering using area
+
+    CC = bwconncomp(BWfinalBi);
+    L = labelmatrix(CC);
+    stats = regionprops('table',L,'Area');
+    
+    numstats = table2array(stats);
+    label = find(numstats(:)>Areathresh);
+    f = transpose(1:size(label,1));
+    AMI = numstats(label,:);
+    combine = [f,AMI];
+    
+    filareas = ismember(L,label);
+
+    disp('Generating Filtered Segments')
+    f4 = figure,imshow(filareas),colorbar,caxis([0 1]),title(['Filtered Segments',num2str(i)])
+    saveas(f4,fullfile(DESTINATION_FOLDER,[filescell{1,i}(max(find(filescell{1,i}=='\')+1):end-4),'4_Filtered_Segmented_Image','.png']))
+    koolaid = A1;
+    hist = histogram(A1,256);
+    vals = hist.Values;
+
+    vals(vals==0) = [];
+    vals = transpose(vals);
+    vals = log10(vals);
+    lenv = size(vals,1);
+    lindex = transpose([1:lenv]);
+    dvals = [lindex,vals];
+    x = lindex;
+    y = vals;
+    p = polyfit(x,y,1);
+    
+    y1 = polyval(p,x);
+    figure
+    plot(x,y,'o')
+    hold on
+    plot(x,y1)
+    
+    flango = p(1).*x(:,1)+p(2);
+    difz = flango-y;
+    normie = max(difz);
+    binpoint = find(difz==normie);
+    
+
+    koolaid(koolaid<PunctaThresh+PunctaThresh*(PTAdjust)) = 0;
+    close
+    
+    f5 = figure,imshow(koolaid),colorbar,caxis([0 1])
+    saveas(f5,fullfile(DESTINATION_FOLDER,[filescell{1,i}(max(find(filescell{1,i}=='\')+1):end-4),'5_Puncta_Raw_Image','.png']))
+    
+    
+    Pseglog = logical(koolaid);
+    Pseg = bwconncomp(Pseglog);
+    LabelPseg = labelmatrix(Pseg);
+    
+    Punctastats = regionprops('table',LabelPseg,A1,'Area','MeanIntensity');
+    
+    Pnumstats = table2array(Punctastats);
+    plabel = find(Pnumstats(:,1)>Areathresh2 & Pnumstats(:,1)<Areathresh3);
+    o = transpose(1:size(plabel,1));
+    pAMI = Pnumstats(plabel,:);
+    pcombine = [o,pAMI];
+    
+    pareas1 = ismember(LabelPseg,plabel);
+
+    f6 = figure,imshow(pareas1),colorbar,caxis([0 1])
+    saveas(f6,fullfile(DESTINATION_FOLDER,[filescell{1,i}(max(find(filescell{1,i}=='\')+1):end-4),'6_Filtered_Puncta_Image','.png']))
+
+    %Saving Process
+    pfinalstats = regionprops('table',pareas1,A1,'Centroid','Area','MeanIntensity');
+    pfinalstatsarr = table2array(pfinalstats);
+    FINALTABLE = table(transpose(1:size(pfinalstatsarr,1)),pfinalstatsarr(:,1),pfinalstatsarr(:,4),'VariableNames',{'Label','Area(Px)','MeanIntensity'});
+    writetable(FINALTABLE,fullfile(DESTINATION_FOLDER,[filescell{1,i}(max(find(filescell{1,i}=='\')+1):end-4),'Puncta_Statistics','.csv']));
+
+    structarea = bwconncomp(filareas);
+    labmat = labelmatrix(structarea);
+        
+    
+    structarea = bwconncomp(filareas);
+    Cellz = [1:structarea.NumObjects];
+    
+    
+    DataPunctaTab = table(Cellz(:),'VariableNames',{'Cell Labels'});
+    writetable(DataPunctaTab,fullfile(DESTINATION_FOLDER,[filescell{1,i}(max(find(filescell{1,i}=='\')+1):end-4),'Cell Labels','.csv']));
+    close all
+end
+    
+   
